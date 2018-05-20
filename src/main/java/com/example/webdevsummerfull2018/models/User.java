@@ -9,10 +9,20 @@ import javax.persistence.Id;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private int id;
 	private String username;
+	private String password;
 	private String firstName;
 	private String lastName;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public int getId() {
 		return id;
