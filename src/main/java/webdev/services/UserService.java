@@ -1,4 +1,4 @@
-package com.example.webdevsummerfull2018.services;
+package webdev.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.webdevsummerfull2018.repositories.UserRepository;
-import com.example.webdevsummerfull2018.models.User;
+import webdev.models.User;
+import webdev.repositories.UserRepository;
 @RestController
 
 public class UserService {

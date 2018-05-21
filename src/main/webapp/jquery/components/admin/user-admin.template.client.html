@@ -37,38 +37,51 @@
 
 	  </tr>
 	  <tr class="wbdv-form">
-	   <td><input id="userNameFld" class="form-control"
+	   <td><input id="userNameFld"
+				  class="form-control"
 				  placeholder="Username"/></td>
-	   <td><input id="passwordFld" class="form-control" type="password"/></td>
-	   <td><input id="firstNameFld"class="form-control" placeholder="John"/></td>
-	   <td><input id="lastNameFld" class="form-control" placeholder="doe"/></td>
-		  <td><select id="roleFld" class="form-control">
+	   <td><input id="passwordFld"
+				  class="form-control"
+				  type="password"/></td>
+	   <td><input id="firstNameFld"
+				  class="form-control"
+				  placeholder="John"/></td>
+	   <td><input id="lastNameFld"
+				  class="form-control"
+				  placeholder="doe"/></td>
+		  <td><select id="roleFld"
+					  class="form-control">
 			  <option value="FACULTY">Faculty</option>
 			  <option value="STUDENT">Student</option>
 		  </select></td>
-		  <td><span class="float-right" style="white-space: nowrap">
-            <i class="fa-2x fa fa-search wbdv-search"></i>
-			<i class="fa-2x fa fa-plus wbdv-create"></i>
-			<i class="fa-2x fa fa-check wbdv-update"></i>
-          </span></td>
 
-		
+
+		  <td><span class="float-right" style="white-space: nowrap">
+            <i id="wbdv-search" type ="button" class="fa-2x fa fa-search wbdv-search"></i>
+			<i id="wbdv-create" type ="button" class="fa-2x fa fa-plus wbdv-create"></i>
+			<i id="wbdv-update" type ="button" class="fa-2x fa fa-check wbdv-update"></i>
+          </span>
+		  </td>
+
+
 	   
 	  </tr>
 	</thead>
 
 		<tbody class="wbdv-tbody">
-		<tr class="wbdv-template wbdv-user wbdv-hidden">
+
+		 <tr class="wbdv-template wbdv-user wbdv-hidden">
 			<td class="wbdv-username">ada</td>
 			<td>&nbsp;</td>
 			<td class="wbdv-first-name">Ada</td>
 			<td class="wbdv-last-name">Lovelace</td>
 			<td class="wbdv-role">FACULTY</td>
 			<td class="wbdv-actions">
-        <span class="float-right">
-          <i id="wbdv-remove" class="fa-2x fa fa-times wbdv-remove"></i>
-          <i id="wbdv-edit" class="fa-2x fa fa-pencil wbdv-edit"></i>
-        </span>
+			   <span class="float-right">
+			      <td><i id="wbdv-remove"  class="fa-2x fa fa-times wbdv-remove"></i></td>
+			      <td><i id="wbdv-edit"   class="fa-2x fa fa-pencil wbdv-edit"></i></td>
+
+           </span>
 			</td>
 		</tr>
 		</tbody>

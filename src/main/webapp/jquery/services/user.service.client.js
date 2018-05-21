@@ -8,17 +8,9 @@ function UserServiceClient() {
     this.findUserById = findUserById;
     this.deleteUser = deleteUser;
     this.updateUser = updateUser;
-
     this.login=login;
-
-
-
-    this.url =
-        'http://localhost:8080/api/user';
-
-    this.login_url =
-        'http://localhost:8080/api/login';
-
+    this.url = 'http://localhost:8080/api/user';
+    this.login_url = 'http://localhost:8080/api/login';
     var self = this;
 
 
@@ -36,9 +28,9 @@ function UserServiceClient() {
     function findUserById(userId) {
         return fetch(self.url + '/' + userId)
             .then(function (response) {
-                return response.json();
+                return response.json()
 
-            });
+            })
     }
 
     function updateUser(userId, user) {
