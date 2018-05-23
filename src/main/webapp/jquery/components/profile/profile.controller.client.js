@@ -1,61 +1,69 @@
-
-
-
-
-
-
 (function () {
-    $(init);
 
+    var $usernameFld, $PhoneFld, $EmailFld, $roleFld, $BirthDateFld;
+    var $updateBtn, $Logout;
 
     var userService = new UserServiceClient();
-    var $staticEmail;
 
-    var $firstName;
-    var $lastName;
-     var $updateBtn;
-    function init(){
 
-        $staticEmail=$("#staticEmail");
-        $firstName=$("#firstName");
-        $lastName=$("#lastName");
-        $updateBtn=$("#updateBtn")
-            .click(updateUser);
+    $(main);
 
-        findUserById(12);
+    function main() {
+        $usernameFld = $("#UsernameFld");
+        $EmailFld = $("#EmailFld");
+        $PhoneFld = $("#Phone");
+        $roleFld = $("#roleFld");
+        $BirthDateFld = $("#DateBirthFld");
+        $updateBtn = $("#updateBtn")
+            .click(updateProfile);
+        $Logout = $("#logoutBtn").click(logout);
+
+
+        //findUserById(12);
 
 
     }
 
-    function updateUser() {
-        var user ={
-            firstName:$firstName.val(),
-            lastName:$lastName.val()
+    function logout() {
+        userService
+            .logout();
+
+    }
+
+    function updateProfile() {
+        var user = {
+            username: $usernameFld.val(),
+            email: $EmailFld.val(),
+            phone: $PhoneFld.val(),
+            role: $roleFld.val(),
+            dateOfBirth: $BirthDateFld.val()
+
+
         };
 
         userService
-            .updateUser(12,user)
-            .then(success);
+            .updateProfile(user);
+
 
     }
-    function success(response){
-        if(response ==null){
+
+
+    function success(response) {
+        if (response == null) {
             alert('unable to update');
         }
         alert('success');
     }
 
-    function findUserById(userId){
-        userService
-            .findUserById(userId)
-            .then(renderUser);
-   }
 
-   function  renderUser(user) {
-       console.log(user);
-       $staticEmail.val(user.username);
-       $firstName.val(user.firstName);
-       $lastName.val(user.lastName);
-   }
 
-    })();
+    function renderUser(user) {
+        console.log(user);
+        $usernameFld.val(user.username);
+        $EmailFld.val(user.email);
+        $PhoneFld.val(user.phone);
+        $roleFld.val(user.role);
+        $BirthDateFld.val(user.dateOfBirth);
+    }
+
+})();

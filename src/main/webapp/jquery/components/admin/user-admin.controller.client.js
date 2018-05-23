@@ -87,7 +87,6 @@
             $row.find('.wbdv-username')
                 .html(user.username);
 
-
             var userUpdate ={
                     username:$usernameFld.val(),
                     password:$passwordFld.val(),
@@ -98,7 +97,6 @@
                 userService
                     .updateUser(userID,user)
                     .then(success);
-
 
         }
 
@@ -115,7 +113,7 @@
             var userID =deletBtn
                 .parent()
                 .parent()
-
+                .parent()
                 .attr('id');
             userService
                 .deleteUser(userID)
@@ -126,25 +124,20 @@
             var userID =deletBtn
                 .parent()
                 .parent()
+                .parent()
                 .attr('id');
 
-            var user= userService
-                .findUserById(userID);
+           console.log(userID);
+            userService
+                .findUserById(userID).then(function renderSelectUser(user){
 
-
-
-
-
-
-
-
-
-            $('#userNameFld').value=user.username;
+                $usernameFld.val(user.username);
 
                 $passwordFld.val(user.password);
                 $firstNameFld.val(user.firstName);
                 $lastNameFld.val(user.lastName);
 
+            });
 
 
         }
