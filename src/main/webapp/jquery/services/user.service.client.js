@@ -16,7 +16,7 @@ function UserServiceClient() {
     var self = this;
 
     function updateProfile(user) {
-        return fetch(self.updateProfile_url , {
+        return fetch(self.updateProfile_url, {
             method: 'put',
             credentials: 'same-origin',
             body: JSON.stringify(user),
@@ -43,7 +43,7 @@ function UserServiceClient() {
 
 
     function logout() {
-         return fetch(self.logout_url).then(goToLogin);
+        return fetch(self.logout_url).then(goToLogin);
     }
 
     function goToLogin() {
@@ -104,6 +104,7 @@ function UserServiceClient() {
         }
 
     }
+
     function goToProfile() {
         window.location.href = '../profile/profile.template.client.html';
     }
@@ -124,17 +125,12 @@ function UserServiceClient() {
             headers: {
                 'content-type': 'application/json'
             }
-        })
-            .then(function (response) {
-                if (response.bodyUsed) {
-                    return response.json();
-                } else {
-                    return null;
-                }
-
-            });
+        }).then(verifyUpdate).catch((error) => {
+            alert(error);
+        });
 
     }
+
 
 
     function findAllUsers() {
@@ -152,14 +148,39 @@ function UserServiceClient() {
             headers: {
                 'content-type': 'application/json'
             }
+        }).then(successCreate).catch((error) => {
+            alert(error);
         });
     }
+    function successCreate(response) {
+        if (response.ok) {
+
+            alert("success Create an Account")
+
+        }
+
+        else throw new Error('cant not Create')
+
+    }
+
 
     function deleteUser(userID) {
         return fetch(self.user_url + '/' + userID, {
             method: 'delete'
-        })
+        }).then(successdelete).catch((error) => {
+            alert(error);
+        });
 
+
+    }
+    function successdelete(response) {
+        if (response.ok) {
+
+            alert("success delete")
+            goToProfile();
+        }
+
+        else throw new Error('cant not delete')
 
     }
 }

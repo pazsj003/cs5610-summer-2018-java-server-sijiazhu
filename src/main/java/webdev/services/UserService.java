@@ -1,5 +1,6 @@
 package webdev.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,13 +40,13 @@ public class UserService {
 			if (set(user, newUser)) {
 				repository.save(user);
 				return user;
+			}else {
+				throw new Exception("dont updateuser anything");
 			}
-			return null;
-		}
-		else {
+			
+		} else {
 			throw new Exception("cant updateuser");
 		}
-		
 
 	}
 
@@ -53,23 +55,27 @@ public class UserService {
 		User currentUser = (User) session.getAttribute("user");
 
 		if (currentUser != null) {
-			Optional<User> data = repository.findUserByUsername(currentUser.getUsername());
-			if (data.isPresent()) {
-				User onlineuser = data.get();
-				if (set(onlineuser, user)) {
-					repository.save(onlineuser);
-					return user;
+			ArrayList<User> data = (ArrayList<User>) findUserByUsername(currentUser.getUsername());
+			if (data != null) {
+				for (User selectuser : data) {
+					if (selectuser!=null) {
+						// User onlineuser = data.get();
+						if (set(selectuser, user)) {
+							repository.save(selectuser);
+							return selectuser;
+						}
+						return null;
+					}
 				}
-				return null;
-			}
-			else {
+			} else {
 				throw new Exception("cant updateuser");
 			}
-			
-		}else {
+
+		} else {
 			throw new Exception("cant updateprofile");
 		}
-		
+		return currentUser;
+
 	}
 
 	public boolean set(User CurrentUser, User updateedUser) {
@@ -90,6 +96,18 @@ public class UserService {
 			CurrentUser.setEmail(updateedUser.getEmail());
 			change = true;
 		}
+		if (CurrentUser.getFirstName() != updateedUser.getFirstName()) {
+			CurrentUser.setFirstName(updateedUser.getFirstName());
+			change = true;
+		}
+		if (CurrentUser.getLastName() != updateedUser.getLastName()) {
+			CurrentUser.setLastName(updateedUser.getLastName());
+			change = true;
+		}
+		if (CurrentUser.getPassword() != updateedUser.getPassword()) {
+			CurrentUser.setPassword(updateedUser.getPassword());
+			change = true;
+		}
 		if (CurrentUser.getDateOfBirth() != updateedUser.getDateOfBirth()) {
 			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
 			change = true;
@@ -101,19 +119,19 @@ public class UserService {
 
 	public User register(@RequestBody User user, HttpSession session) throws Exception {
 
-		User newUser = findUserByUsername(user.getUsername());
+		ArrayList<User> newUser =  (ArrayList<User>) findUserByUsername(user.getUsername());
 
-		if (newUser != null) {
+		for(User finduser:newUser) {
+			if (finduser!= null) {
 
-			throw new Exception("cant register");
-
-		} else {
-
-			createUser(user);
+				throw new Exception("cant register");
+			}
+		}
+		    createUser(user);
 			session.setAttribute("user", user);
 
 			return (User) session.getAttribute("user");
-		}
+		
 
 	}
 
@@ -126,13 +144,19 @@ public class UserService {
 		return null;
 	}
 
-	@GetMapping("/api/user/{username}")
-	public User findUserByUsername(@PathVariable("username") String userName) {
-		Optional<User> data = repository.findUserByUsername(userName);
-		if (data.isPresent()) {
-			return data.get();
+	@GetMapping("/api/user/")
+	public Iterable<User> findUserByUsername(@RequestParam(name = "username", required = false) String username) {
+
+		if (username != null) {
+			return repository.findUserByUsername(username);
 		}
-		return null;
+		return repository.findAll();
+		//
+		// Optional<User> data = repository.findUserByUsername(userName);
+		// if (data.isPresent()) {
+		// return data.get();
+		// }
+		// return null;
 	}
 
 	@PostMapping("/api/user")
@@ -143,7 +167,7 @@ public class UserService {
 	@PostMapping("/api/login")
 	public User login(@RequestBody User user, HttpSession session) throws Exception {
 
-		List<User> currentUser = (List<User>) repository.findUserByCredentials(user.getUsername(), user.getPassword());
+		ArrayList<User> currentUser = (ArrayList<User>) findUserByCredentials(user.getUsername(), user.getPassword());
 		if (currentUser.get(0) == null) {
 			throw new Exception("cant Login");
 		}
@@ -151,11 +175,25 @@ public class UserService {
 		return (User) session.getAttribute("user");
 
 	}
+	
+	public Iterable<User> findUserByCredentials(@RequestParam(name = "username", required = false) String username,
+			@RequestParam(name="password",required=false) String password) throws Exception {
+				if(username != null && password != null) {
+					return repository.findUserByCredentials(username, password);
+				} else if(username != null) { 
+					throw new Exception("cant Login");
+				}
+				return repository.findAll();
+				}
+				
+
+		
+	
 
 	@PostMapping("/api/logout")
 	public User logout(HttpSession session) {
 		session.invalidate();
-       return null;
+		return null;
 	}
 
 	@GetMapping("/api/user")
