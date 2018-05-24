@@ -9,11 +9,11 @@ function UserServiceClient() {
     this.login = login;
     this.logout = logout;
     this.profile = Profile;
-    this.updateProfile_url = '/api/profile';
-    this.user_url = '/api/user';
-    this.reg = '/api/register';
-    this.login_url = '/api/login';
-    this.logout_url = '/api/logout';
+    this.updateProfile_url = 'http://localhost:8080/api/profile';
+    this.user_url = 'http://localhost:8080/api/user';
+    this.reg = 'http://localhost:8080/api/register';
+    this.login_url = 'http://localhost:8080/api/login';
+    this.logout_url = 'http://localhost:8080/api/logout';
     var self = this;
 
     function updateProfile(user) {
@@ -75,16 +75,17 @@ function UserServiceClient() {
         });
 
 
+
     }
 
     function success(response) {
         if (response.ok) {
 
-            alert("success register")
+            alert("success register");
             goToProfile();
         }
 
-        else throw new Error('cant not register')
+        else throw new Error('username used');
 
     }
 
@@ -111,7 +112,7 @@ function UserServiceClient() {
             goToProfile();
         }
         else {
-            throw new Error('cant not Log In')
+            throw new Error('username password dont match')
         }
 
     }
@@ -137,7 +138,7 @@ function UserServiceClient() {
                 'content-type': 'application/json'
             }
         }).then(verifyUpdate).catch((error) => {
-            alert(error);
+            console.log(error);
         });
 
     }

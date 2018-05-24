@@ -68,11 +68,13 @@
         }
 
         function findAllUsers() {
+
             userService
                 .findAllUsers()
                 .then(renderUsers);
 
         }
+
 
         function findUserById(userId) {
             userService
@@ -97,6 +99,7 @@
                 .then(findAllUsers);
 
             currentUserId = '';
+
         }
 
 
@@ -166,6 +169,7 @@
 
                 $row.find('.wbdv-remove').click(deleteUser);
                 $row.find('.wbdv-edit').click(selectUser);
+
 
             }
 

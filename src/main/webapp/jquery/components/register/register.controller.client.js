@@ -15,9 +15,29 @@
         $lastNameFld = $("#lastNameFld");
         $registerBtn = $('#registerBtn');
 
-        $registerBtn.click(register);
+        $registerBtn.click(verifyPassword);
     }
 
+
+    function verifyPassword() {
+        if ($passwordFld.val() != $verifyPasswordFld.val()) {
+            alert("Password dont match");
+
+            window.location.href = '../register/register.template.client.html';
+
+        } else if ($usernameFld.val() == "" || $passwordFld.val() == "") {
+            alert("please input username and password");
+
+            window.location.href = '../register/register.template.client.html';
+
+        }
+
+
+        else {
+            register();
+        }
+
+    }
 
     function register() {
 

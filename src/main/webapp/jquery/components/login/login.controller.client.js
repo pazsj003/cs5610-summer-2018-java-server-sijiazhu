@@ -13,20 +13,32 @@
 
         $loginBtn = $('#SignInBtn');
 
-        $loginBtn.click(login);
+        $loginBtn.click(verifylog);
     }
+
+
+    function verifylog() {
+        if ($usernameFld.val() == "" || $passwordFld.val() == "") {
+            alert("please input username and password");
+
+            window.location.href = '../login/login.template.client.html';
+
+        }
+
+
+        else {
+            login();
+        }
+
+    }
+
     function login() {
+
 
         var username=$usernameFld.val();
         var password=$passwordFld.val();
 
 
-
-        var user={
-            username:username,
-            password:password,
-
-        }
 
         userService
             .login(username,password)
