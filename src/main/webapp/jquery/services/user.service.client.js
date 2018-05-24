@@ -9,11 +9,11 @@ function UserServiceClient() {
     this.login = login;
     this.logout = logout;
     this.profile = Profile;
-    this.updateProfile_url = 'http://localhost:8080/api/profile';
-    this.user_url = 'http://localhost:8080/api/user';
-    this.reg = 'http://localhost:8080/api/register';
-    this.login_url = 'http://localhost:8080/api/login';
-    this.logout_url = 'http://localhost:8080/api/logout';
+    this.updateProfile_url = '/api/profile';
+    this.user_url = '/api/user';
+    this.reg = '/api/register';
+    this.login_url = '/api/login';
+    this.logout_url = '/api/logout';
     var self = this;
 
     function updateProfile(user) {
