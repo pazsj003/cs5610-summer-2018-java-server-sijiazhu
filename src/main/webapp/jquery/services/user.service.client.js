@@ -11,7 +11,7 @@ function UserServiceClient() {
     this.profile = Profile;
     this.updateProfile_url = '/api/profile';
     this.user_url = '/api/user';
-    this.reg = '/register';
+    this.reg = '/api/register';
     this.login_url = '/api/login';
     this.logout_url = '/api/logout';
     var self = this;
