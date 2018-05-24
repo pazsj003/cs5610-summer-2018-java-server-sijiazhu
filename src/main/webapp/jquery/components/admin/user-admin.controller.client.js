@@ -96,7 +96,7 @@
                 .updateUser(currentUserId, userUpdate)
                 .then(findAllUsers);
 
-            currentUserId = null;
+            currentUserId = '';
         }
 
 
