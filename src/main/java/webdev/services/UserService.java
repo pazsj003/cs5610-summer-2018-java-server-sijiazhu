@@ -33,24 +33,24 @@ public class UserService {
 	}
 
 	@PutMapping("/api/user/{userId}")
-	public User updateUser(@PathVariable("userId") int userId, @RequestBody User newUser,HttpServletResponse response) throws Exception {
+	public User updateUser(@PathVariable("userId") int userId, @RequestBody User newUser, HttpServletResponse response)
+			throws Exception {
 
 		Optional<User> data = repository.findById(userId);
 		if (data.isPresent()) {
 			User user = data.get();
-			int checkStatus=set(user, newUser);
-			if (checkStatus==1) {
+			int checkStatus = set(user, newUser);
+			if (checkStatus == 1) {
 				repository.save(user);
 				return user;
-			} else if(checkStatus==-1) {
-				response.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT);
+			} else if (checkStatus == -1) {
+				response.setStatus(HttpServletResponse.SC_CONFLICT);
 				return null;
-			}else if(checkStatus==0){
-				throw new Exception("dont change anything");		
-				}
-		} 
-			throw new Exception("cant updateuser");
-		
+			} else if (checkStatus == 0) {
+				throw new Exception("dont change anything");
+			}
+		}
+		throw new Exception("dont find user");
 
 	}
 
@@ -63,100 +63,92 @@ public class UserService {
 	}
 
 	@PutMapping("/api/profile")
-	public User updateProfile(@RequestBody User user, HttpSession session,HttpServletResponse response) throws Exception {
-		
+	public User updateProfile(@RequestBody User user, HttpSession session, HttpServletResponse response)
+			throws Exception {
+
 		User currentUser = (User) session.getAttribute("user");
 		if (currentUser != null) {
-			
+
 			User data = (User) findUserById(currentUser.getId());
-			//ArrayList<User> data = (ArrayList<User>) findUserByUsername(currentUser.getUsername());
-			if(data!=null) {
-				System.out.println("#######################################");
-				int checkStatus=set(data, user);
-				if (checkStatus==1) {
+			if (data != null) {
+				int checkStatus = set(data, user);
+				if (checkStatus == 1) {
 					repository.save(data);
 					return data;
-				}
-				else if(checkStatus==-1) {
-					//same user name
-					response.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT);
+				} else if (checkStatus == -1) {
+					// same user name
+					response.setStatus(HttpServletResponse.SC_CONFLICT);
+
+				} else
 					return null;
-				}else return null;
-				
+
 			}
-//			if (data != null) {
-//				for (User selectuser : data) {
-//					if (selectuser != null) {
-//						if (set(selectuser, user)) {
-//							repository.save(selectuser);
-//							return selectuser;
-//						}
-//						return null;
-//					}
-//				}
-//			} 
+
 			else {
 				throw new Exception("cant updateuser");
 			}
 
 		}
-		throw new Exception("current profile is invalid");
+		throw new Exception("current profile is invalid,user not logged in");
 
 	}
 
 	public int set(User CurrentUser, User updateedUser) throws Exception {
 		int change = 0;
 		if (!CurrentUser.getUsername().equals(updateedUser.getUsername())) {
-			// match is there same username used		
-			ArrayList<User> matchUser = (ArrayList<User>) findUserByUsername(updateedUser.getUsername());	
+			// match is there same username used
+
+			ArrayList<User> matchUser = (ArrayList<User>) findUserByUsername(updateedUser.getUsername());
 			for (User finduser : matchUser) {
-				if (finduser != null) {	
+
+				if (finduser != null) {
 					return -1;
 				}
-			}	
+			}
 			CurrentUser.setUsername(updateedUser.getUsername());
 			change = 1;
 		}
-		if (!CurrentUser.getRole().equals(updateedUser.getRole())) {
+		if (CurrentUser.getRole() != updateedUser.getRole()) {
 			CurrentUser.setRole(updateedUser.getRole());
 			change = 1;
 		}
-		if (!CurrentUser.getPhone().equals(updateedUser.getPhone())) {
+		if (CurrentUser.getPhone() != updateedUser.getPhone()) {
 			CurrentUser.setPhone(updateedUser.getPhone());
 			change = 1;
 		}
-		if (!CurrentUser.getEmail().equals(updateedUser.getEmail())) {
+		if (CurrentUser.getEmail() != updateedUser.getEmail()) {
 			CurrentUser.setEmail(updateedUser.getEmail());
 			change = 1;
 		}
-		if (!CurrentUser.getFirstName().equals(updateedUser.getFirstName()) ) {
+		if (CurrentUser.getFirstName() != updateedUser.getFirstName()) {
 			CurrentUser.setFirstName(updateedUser.getFirstName());
 			change = 1;
 		}
-		if (!CurrentUser.getLastName().equals(updateedUser.getLastName()) ) {
+		if (CurrentUser.getLastName() != updateedUser.getLastName()) {
 			CurrentUser.setLastName(updateedUser.getLastName());
 			change = 1;
 		}
 
-//		if (CurrentUser.getDateOfBirth()!=updateedUser.getDateOfBirth() ) {
-//			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
-//			change = 1;
-//		}
+		if (CurrentUser.getDateOfBirth() != updateedUser.getDateOfBirth()) {
+			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
+			change = 1;
+		}
+
 		return change;
 	}
 
 	@PostMapping("/api/register")
 
-	public User register(@RequestBody User user, HttpSession session,HttpServletResponse response) throws Exception {
+	public User register(@RequestBody User user, HttpSession session, HttpServletResponse response) throws Exception {
 
 		ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
 		for (User finduser : newUser) {
 			if (finduser != null) {
-		
+				response.setStatus(HttpServletResponse.SC_CONFLICT);
 				throw new Exception("same username found");
 			}
 		}
-		createUser(user,response);
+		createUser(user, response);
 		session.setAttribute("user", user);
 
 		return (User) session.getAttribute("user");
@@ -183,7 +175,7 @@ public class UserService {
 	}
 
 	@PostMapping("/api/user")
-	public User createUser(@RequestBody User user,HttpServletResponse response) throws Exception {
+	public User createUser(@RequestBody User user, HttpServletResponse response) throws Exception {
 		if (user.getUsername() != "" && user.getPassword() != "" && user.getFirstName() != ""
 				&& user.getLastName() != "") {
 			ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
@@ -191,7 +183,7 @@ public class UserService {
 				if (finduser != null) {
 					response.setStatus(HttpServletResponse.SC_CONFLICT);
 					return null;
-					//throw new Exception("same username found");
+					 
 				}
 			}
 			return repository.save(user);

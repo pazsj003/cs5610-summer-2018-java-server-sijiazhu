@@ -46,13 +46,11 @@ function UserServiceClient() {
 
             alert("success update");
         }
-        else if(response.status==408) {
+        else if (response.status == 409) {
             alert("same username used");
         }
-          else  throw new Error('cant update');
-        }
-
-
+        else throw new Error('cant update');
+    }
 
 
     function logout() {
@@ -75,7 +73,6 @@ function UserServiceClient() {
         }).then(success).catch((error) => {
             alert(error);
         });
-
 
 
     }
@@ -171,7 +168,7 @@ function UserServiceClient() {
 
             alert("success Create an Account")
 
-        }else if(response.status==408){
+        } else if (response.status == 409) {
             alert("same user name used");
         }
 
