@@ -8,6 +8,7 @@ function UserServiceClient() {
     this.register = register;
     this.login = login;
     this.logout = logout;
+    this.profile = Profile;
     this.updateProfile_url = 'http://localhost:8080/api/profile';
     this.user_url = 'http://localhost:8080/api/user';
     this.reg = 'http://localhost:8080/api/register';
@@ -29,6 +30,16 @@ function UserServiceClient() {
 
 
     }
+
+    function Profile() {
+        return fetch(self.updateProfile_url, {
+            credentials: 'same-origin',
+        }).then(function (response) {
+            return response.json()
+
+        })
+    }
+
 
     function verifyUpdate(response) {
         if (response.ok) {
@@ -132,7 +143,6 @@ function UserServiceClient() {
     }
 
 
-
     function findAllUsers() {
         return fetch(self.user_url)
             .then(function (response) {
@@ -152,6 +162,7 @@ function UserServiceClient() {
             alert(error);
         });
     }
+
     function successCreate(response) {
         if (response.ok) {
 
@@ -159,7 +170,7 @@ function UserServiceClient() {
 
         }
 
-        else throw new Error('cant not Create')
+        else throw new Error('cant Create')
 
     }
 
@@ -173,11 +184,12 @@ function UserServiceClient() {
 
 
     }
+
     function successdelete(response) {
         if (response.ok) {
 
             alert("success delete")
-            goToProfile();
+
         }
 
         else throw new Error('cant not delete')

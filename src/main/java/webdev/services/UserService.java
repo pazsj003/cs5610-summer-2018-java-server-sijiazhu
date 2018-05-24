@@ -40,13 +40,26 @@ public class UserService {
 			if (set(user, newUser)) {
 				repository.save(user);
 				return user;
-			}else {
+			} else {
 				throw new Exception("dont updateuser anything");
 			}
-			
+
 		} else {
 			throw new Exception("cant updateuser");
 		}
+
+	}
+
+	@GetMapping("/api/profile")
+	public User profile(HttpSession session) throws Exception {
+		User currentUser = (User) session.getAttribute("user");
+		// User getuser=(User)
+		// findUserByCredentials(currentUser.getUsername(),currentUser.getPassword());
+		// if(getuser!=null) {
+		return currentUser;
+		// }
+
+		// throw new Exception("cant get profile");
 
 	}
 
@@ -58,8 +71,7 @@ public class UserService {
 			ArrayList<User> data = (ArrayList<User>) findUserByUsername(currentUser.getUsername());
 			if (data != null) {
 				for (User selectuser : data) {
-					if (selectuser!=null) {
-						// User onlineuser = data.get();
+					if (selectuser != null) {
 						if (set(selectuser, user)) {
 							repository.save(selectuser);
 							return selectuser;
@@ -71,11 +83,9 @@ public class UserService {
 				throw new Exception("cant updateuser");
 			}
 
-		} else {
-			throw new Exception("cant updateprofile");
 		}
-		return currentUser;
-
+			throw new Exception("current profile is invalid");
+		
 	}
 
 	public boolean set(User CurrentUser, User updateedUser) {
@@ -104,10 +114,7 @@ public class UserService {
 			CurrentUser.setLastName(updateedUser.getLastName());
 			change = true;
 		}
-		if (CurrentUser.getPassword() != updateedUser.getPassword()) {
-			CurrentUser.setPassword(updateedUser.getPassword());
-			change = true;
-		}
+		
 		if (CurrentUser.getDateOfBirth() != updateedUser.getDateOfBirth()) {
 			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
 			change = true;
@@ -118,20 +125,16 @@ public class UserService {
 	@PostMapping("/api/register")
 
 	public User register(@RequestBody User user, HttpSession session) throws Exception {
-
-		ArrayList<User> newUser =  (ArrayList<User>) findUserByUsername(user.getUsername());
-
-		for(User finduser:newUser) {
-			if (finduser!= null) {
-
-				throw new Exception("cant register");
+		ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
+		for (User finduser : newUser) {
+			if (finduser != null) {
+				throw new Exception("same username found");
 			}
 		}
-		    createUser(user);
-			session.setAttribute("user", user);
+		createUser(user);
+		session.setAttribute("user", user);
 
-			return (User) session.getAttribute("user");
-		
+		return (User) session.getAttribute("user");
 
 	}
 
@@ -151,44 +154,42 @@ public class UserService {
 			return repository.findUserByUsername(username);
 		}
 		return repository.findAll();
-		//
-		// Optional<User> data = repository.findUserByUsername(userName);
-		// if (data.isPresent()) {
-		// return data.get();
-		// }
-		// return null;
+
 	}
 
 	@PostMapping("/api/user")
-	public User createUser(@RequestBody User user) {
-		return repository.save(user);
+	public User createUser(@RequestBody User user) throws Exception {
+		if(user.getUsername()!=""&&user.getPassword()!=""&&user.getFirstName()!=""&&user.getLastName()!="") {
+			return repository.save(user);
+		}
+		throw new Exception("User dont have enough information to create account");
 	}
 
 	@PostMapping("/api/login")
 	public User login(@RequestBody User user, HttpSession session) throws Exception {
 
 		ArrayList<User> currentUser = (ArrayList<User>) findUserByCredentials(user.getUsername(), user.getPassword());
-		if (currentUser.get(0) == null) {
+		if (currentUser != null) {
+			for (User selectuser : currentUser) {
+				if (selectuser != null) {
+					session.setAttribute("user", selectuser);
+					return (User) session.getAttribute("user");
+				}
+
+			}
+		}
+		throw new Exception("cant Login");
+	}
+
+	public Iterable<User> findUserByCredentials(@RequestParam(name = "username", required = false) String username,
+			@RequestParam(name = "password", required = false) String password) throws Exception {
+		if (username != null && password != null) {
+			return repository.findUserByCredentials(username, password);
+		} else if (username != null) {
 			throw new Exception("cant Login");
 		}
-		session.setAttribute("user", user);
-		return (User) session.getAttribute("user");
-
+		return repository.findAll();
 	}
-	
-	public Iterable<User> findUserByCredentials(@RequestParam(name = "username", required = false) String username,
-			@RequestParam(name="password",required=false) String password) throws Exception {
-				if(username != null && password != null) {
-					return repository.findUserByCredentials(username, password);
-				} else if(username != null) { 
-					throw new Exception("cant Login");
-				}
-				return repository.findAll();
-				}
-				
-
-		
-	
 
 	@PostMapping("/api/logout")
 	public User logout(HttpSession session) {

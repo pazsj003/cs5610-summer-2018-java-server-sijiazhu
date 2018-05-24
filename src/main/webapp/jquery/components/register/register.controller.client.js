@@ -1,5 +1,7 @@
 (function () {
-    var $usernameFld, $passwordFld, $verifyPasswordFld;
+    var $usernameFld, $passwordFld, $verifyPasswordFld,
+        $firstNameFld, $lastNameFld;
+
     var $registerBtn;
     var userService = new UserServiceClient();
     $(main);
@@ -9,8 +11,9 @@
         $usernameFld = $('#inputUsername');
         $passwordFld = $('#inputPassword');
         $verifyPasswordFld = $('#verifyPassword');
+        $firstNameFld = $("#firstNameFld");
+        $lastNameFld = $("#lastNameFld");
         $registerBtn = $('#registerBtn');
-
 
         $registerBtn.click(register);
     }
@@ -26,6 +29,8 @@
         var user = {
             username: username,
             password: password,
+            firstName: $firstNameFld.val(),
+            lastName: $lastNameFld.val(),
 
         }
 
