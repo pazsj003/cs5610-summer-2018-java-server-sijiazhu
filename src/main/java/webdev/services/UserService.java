@@ -53,13 +53,8 @@ public class UserService {
 	@GetMapping("/api/profile")
 	public User profile(HttpSession session) throws Exception {
 		User currentUser = (User) session.getAttribute("user");
-		// User getuser=(User)
-		// findUserByCredentials(currentUser.getUsername(),currentUser.getPassword());
-		// if(getuser!=null) {
-		return currentUser;
-		// }
 
-		// throw new Exception("cant get profile");
+		return currentUser;
 
 	}
 
@@ -84,8 +79,8 @@ public class UserService {
 			}
 
 		}
-			throw new Exception("current profile is invalid");
-		
+		throw new Exception("current profile is invalid");
+
 	}
 
 	public boolean set(User CurrentUser, User updateedUser) {
@@ -114,7 +109,7 @@ public class UserService {
 			CurrentUser.setLastName(updateedUser.getLastName());
 			change = true;
 		}
-		
+
 		if (CurrentUser.getDateOfBirth() != updateedUser.getDateOfBirth()) {
 			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
 			change = true;
@@ -125,6 +120,7 @@ public class UserService {
 	@PostMapping("/api/register")
 
 	public User register(@RequestBody User user, HttpSession session) throws Exception {
+
 		ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
 		for (User finduser : newUser) {
 			if (finduser != null) {
@@ -159,7 +155,8 @@ public class UserService {
 
 	@PostMapping("/api/user")
 	public User createUser(@RequestBody User user) throws Exception {
-		if(user.getUsername()!=""&&user.getPassword()!=""&&user.getFirstName()!=""&&user.getLastName()!="") {
+		if (user.getUsername() != "" && user.getPassword() != "" && user.getFirstName() != ""
+				&& user.getLastName() != "") {
 			return repository.save(user);
 		}
 		throw new Exception("User dont have enough information to create account");
