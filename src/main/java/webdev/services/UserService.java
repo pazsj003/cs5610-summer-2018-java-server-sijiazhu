@@ -76,7 +76,7 @@ public class UserService {
 					repository.save(data);
 					return data;
 				} else if (checkStatus == -1) {
-					// same user name
+					// same user name cant update
 					response.setStatus(HttpServletResponse.SC_CONFLICT);
 
 				} else
