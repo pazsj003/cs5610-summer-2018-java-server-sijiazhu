@@ -1,5 +1,3 @@
-
-
 (function () {
     var $usernameFld, $passwordFld;
     var $loginBtn;
@@ -13,11 +11,11 @@
 
         $loginBtn = $('#SignInBtn');
 
-        $loginBtn.click(verifylog);
+        $loginBtn.click(verifyLogin);
     }
 
 
-    function verifylog() {
+    function verifyLogin() {
         if ($usernameFld.val() == "" || $passwordFld.val() == "") {
             alert("please input username and password");
 
@@ -35,12 +33,11 @@
     function login() {
 
 
-        var username=$usernameFld.val();
-        var password=$passwordFld.val();
-
+        var username = $usernameFld.val();
+        var password = $passwordFld.val();
 
 
         userService
-            .login(username,password)
+            .login(username, password)
     }
 })();

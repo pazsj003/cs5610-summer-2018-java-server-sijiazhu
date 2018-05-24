@@ -9,11 +9,11 @@ function UserServiceClient() {
     this.login = login;
     this.logout = logout;
     this.profile = Profile;
-    this.updateProfile_url = '/api/profile';
-    this.user_url = '/api/user';
-    this.reg = '/api/register';
-    this.login_url = '/api/login';
-    this.logout_url = '/api/logout';
+    this.updateProfile_url = 'http://localhost:8080/api/profile';
+    this.user_url = 'http://localhost:8080/api/user';
+    this.reg = 'http://localhost:8080/api/register';
+    this.login_url = 'http://localhost:8080/api/login';
+    this.logout_url = 'http://localhost:8080/api/logout';
     var self = this;
 
     function updateProfile(user) {
@@ -44,13 +44,15 @@ function UserServiceClient() {
     function verifyUpdate(response) {
         if (response.ok) {
 
-            alert("success update")
+            alert("success update");
         }
-        else {
-            throw new Error('cant update')
+        else if(response.status==408) {
+            alert("same username used");
+        }
+          else  throw new Error('cant update');
         }
 
-    }
+
 
 
     function logout() {
@@ -169,6 +171,8 @@ function UserServiceClient() {
 
             alert("success Create an Account")
 
+        }else if(response.status==408){
+            alert("same user name used");
         }
 
         else throw new Error('cant Create')

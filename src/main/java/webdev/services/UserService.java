@@ -33,20 +33,24 @@ public class UserService {
 	}
 
 	@PutMapping("/api/user/{userId}")
-	public User updateUser(@PathVariable("userId") int userId, @RequestBody User newUser) throws Exception {
+	public User updateUser(@PathVariable("userId") int userId, @RequestBody User newUser,HttpServletResponse response) throws Exception {
+
 		Optional<User> data = repository.findById(userId);
 		if (data.isPresent()) {
 			User user = data.get();
-			if (set(user, newUser)) {
+			int checkStatus=set(user, newUser);
+			if (checkStatus==1) {
 				repository.save(user);
 				return user;
-			} else {
-				throw new Exception("dont updateuser anything");
-			}
-
-		} else {
+			} else if(checkStatus==-1) {
+				response.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT);
+				return null;
+			}else if(checkStatus==0){
+				throw new Exception("dont change anything");		
+				}
+		} 
 			throw new Exception("cant updateuser");
-		}
+		
 
 	}
 
@@ -59,22 +63,39 @@ public class UserService {
 	}
 
 	@PutMapping("/api/profile")
-	public User updateProfile(@RequestBody User user, HttpSession session) throws Exception {
+	public User updateProfile(@RequestBody User user, HttpSession session,HttpServletResponse response) throws Exception {
+		
 		User currentUser = (User) session.getAttribute("user");
-
 		if (currentUser != null) {
-			ArrayList<User> data = (ArrayList<User>) findUserByUsername(currentUser.getUsername());
-			if (data != null) {
-				for (User selectuser : data) {
-					if (selectuser != null) {
-						if (set(selectuser, user)) {
-							repository.save(selectuser);
-							return selectuser;
-						}
-						return null;
-					}
+			
+			User data = (User) findUserById(currentUser.getId());
+			//ArrayList<User> data = (ArrayList<User>) findUserByUsername(currentUser.getUsername());
+			if(data!=null) {
+				System.out.println("#######################################");
+				int checkStatus=set(data, user);
+				if (checkStatus==1) {
+					repository.save(data);
+					return data;
 				}
-			} else {
+				else if(checkStatus==-1) {
+					//same user name
+					response.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT);
+					return null;
+				}else return null;
+				
+			}
+//			if (data != null) {
+//				for (User selectuser : data) {
+//					if (selectuser != null) {
+//						if (set(selectuser, user)) {
+//							repository.save(selectuser);
+//							return selectuser;
+//						}
+//						return null;
+//					}
+//				}
+//			} 
+			else {
 				throw new Exception("cant updateuser");
 			}
 
@@ -83,51 +104,59 @@ public class UserService {
 
 	}
 
-	public boolean set(User CurrentUser, User updateedUser) {
-		boolean change = false;
-		if (CurrentUser.getUsername() != updateedUser.getUsername()) {
+	public int set(User CurrentUser, User updateedUser) throws Exception {
+		int change = 0;
+		if (!CurrentUser.getUsername().equals(updateedUser.getUsername())) {
+			// match is there same username used		
+			ArrayList<User> matchUser = (ArrayList<User>) findUserByUsername(updateedUser.getUsername());	
+			for (User finduser : matchUser) {
+				if (finduser != null) {	
+					return -1;
+				}
+			}	
 			CurrentUser.setUsername(updateedUser.getUsername());
-			change = true;
+			change = 1;
 		}
-		if (CurrentUser.getRole() != updateedUser.getRole()) {
+		if (!CurrentUser.getRole().equals(updateedUser.getRole())) {
 			CurrentUser.setRole(updateedUser.getRole());
-			change = true;
+			change = 1;
 		}
-		if (CurrentUser.getPhone() != updateedUser.getPhone()) {
+		if (!CurrentUser.getPhone().equals(updateedUser.getPhone())) {
 			CurrentUser.setPhone(updateedUser.getPhone());
-			change = true;
+			change = 1;
 		}
-		if (CurrentUser.getEmail() != updateedUser.getEmail()) {
+		if (!CurrentUser.getEmail().equals(updateedUser.getEmail())) {
 			CurrentUser.setEmail(updateedUser.getEmail());
-			change = true;
+			change = 1;
 		}
-		if (CurrentUser.getFirstName() != updateedUser.getFirstName()) {
+		if (!CurrentUser.getFirstName().equals(updateedUser.getFirstName()) ) {
 			CurrentUser.setFirstName(updateedUser.getFirstName());
-			change = true;
+			change = 1;
 		}
-		if (CurrentUser.getLastName() != updateedUser.getLastName()) {
+		if (!CurrentUser.getLastName().equals(updateedUser.getLastName()) ) {
 			CurrentUser.setLastName(updateedUser.getLastName());
-			change = true;
+			change = 1;
 		}
 
-		if (CurrentUser.getDateOfBirth() != updateedUser.getDateOfBirth()) {
-			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
-			change = true;
-		}
+//		if (CurrentUser.getDateOfBirth()!=updateedUser.getDateOfBirth() ) {
+//			CurrentUser.setDateOfBirth(updateedUser.getDateOfBirth());
+//			change = 1;
+//		}
 		return change;
 	}
 
 	@PostMapping("/api/register")
 
-	public User register(@RequestBody User user, HttpSession session) throws Exception {
+	public User register(@RequestBody User user, HttpSession session,HttpServletResponse response) throws Exception {
 
 		ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
 		for (User finduser : newUser) {
 			if (finduser != null) {
+		
 				throw new Exception("same username found");
 			}
 		}
-		createUser(user);
+		createUser(user,response);
 		session.setAttribute("user", user);
 
 		return (User) session.getAttribute("user");
@@ -154,9 +183,17 @@ public class UserService {
 	}
 
 	@PostMapping("/api/user")
-	public User createUser(@RequestBody User user) throws Exception {
+	public User createUser(@RequestBody User user,HttpServletResponse response) throws Exception {
 		if (user.getUsername() != "" && user.getPassword() != "" && user.getFirstName() != ""
 				&& user.getLastName() != "") {
+			ArrayList<User> newUser = (ArrayList<User>) findUserByUsername(user.getUsername());
+			for (User finduser : newUser) {
+				if (finduser != null) {
+					response.setStatus(HttpServletResponse.SC_CONFLICT);
+					return null;
+					//throw new Exception("same username found");
+				}
+			}
 			return repository.save(user);
 		}
 		throw new Exception("User dont have enough information to create account");
