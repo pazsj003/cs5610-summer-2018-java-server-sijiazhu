@@ -29,7 +29,7 @@ function UserServiceClient() {
         });
 
 
-        
+
     }
 
     function Profile() {
