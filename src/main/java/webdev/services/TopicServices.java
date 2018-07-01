@@ -21,7 +21,7 @@ import webdev.repositories.ModuleRepository;
 import webdev.repositories.TopicRepository;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 10000)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TopicServices {
 	@Autowired
 	LessonRepository lessonRepository;	

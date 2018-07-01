@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +16,7 @@ enum ListType{
 	unordered
 }
 @Entity
+@Table(name="SINGLE_WIDGET")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Widget {
 	@Id

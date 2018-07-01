@@ -16,14 +16,17 @@ import webdev.models.Course;
 import webdev.repositories.CourseRepository;
 
 @RestController
-@CrossOrigin(origins="*",maxAge=10000)
+@CrossOrigin(origins="*",maxAge=3600)
 public class CourseServices {
 	@Autowired
 	CourseRepository courseRepository;	
+	
 	@GetMapping("/api/course")
 	public Iterable<Course> findAllCourses() {
 		return courseRepository.findAll(); 
 	}
+	
+	
 	@GetMapping("/api/course/{courseId}")
 	public Course findCourseById(@PathVariable("courseId") int courseId) {
 		Optional<Course> data = courseRepository.findById(courseId);
@@ -37,6 +40,7 @@ public class CourseServices {
 	public Course createCourse(@RequestBody Course course) {
 			return courseRepository.save(course);
 	}
+	
 	@DeleteMapping("/api/course/{courseId}")
 	public void deleteCourse(
 	@PathVariable("courseId") int id) {

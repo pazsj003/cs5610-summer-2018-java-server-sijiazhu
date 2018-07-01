@@ -22,7 +22,7 @@ import webdev.repositories.TopicRepository;
 import webdev.repositories.WidgetRepository;
 
 @RestController
-@CrossOrigin(origins = "*",maxAge=10000)
+@CrossOrigin(origins = "*",maxAge=3600)
 
 public class WidgetService {
  
@@ -62,7 +62,7 @@ public class WidgetService {
 		return null;
 	}
 	@PostMapping("/api/topic/{topicId}/widget")
-	public void saveWidgets(@PathVariable("topicId") int topicId, @RequestBody Widget[] newWidgets) {
+	public void saveWidgets(@PathVariable("topicId") int topicId, @RequestBody List<Widget> newWidgets) {
 		Optional<Topic> data = topicRepository.findById(topicId);
 		if(data.isPresent()) {
 			Topic topic = data.get();
@@ -72,6 +72,7 @@ public class WidgetService {
 			}
 			for (Widget widget : newWidgets) {
 				widget.setTopic(topic);
+			System.out.println("widgetID is ***"+widget.getId()+"widgets text ******"+widget.getText());
 				repository.save(widget);
 			}
 		} 
