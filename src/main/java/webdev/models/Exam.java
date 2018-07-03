@@ -11,6 +11,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name ="SINGLE_EXAM")
 @Entity
 public class Exam extends Widget {
+	@Column(name = "POINTS")
+	private String points;
+	public String getPoints() {
+		return points;
+	}
+	public void setPoints(String points) {
+		this.points = points;
+	}
 	@Column(name = "TITLE")
 	private String title;
 	@Column(name = "DESCRIPTION")

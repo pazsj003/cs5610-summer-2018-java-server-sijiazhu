@@ -39,11 +39,13 @@ public class AssignmentService {
 			for(Widget widget:widgets) {
 				if(widget instanceof Assignment) {
 					Assignment assignment  = (Assignment)widget;
-					if(!assignment.getTitle().equals("")) {
+					if(assignment.getTitle()!=null) {
 						newAssignment.add(assignment);
 					}
 				}
 			}
+			
+			System.out.println("find all **********assignment");
 			return newAssignment;
 		}
 		return null;
@@ -54,11 +56,11 @@ public class AssignmentService {
 	@PostMapping("/api/topic/{topicId}/assignment")
 	public Assignment createAssignment(@PathVariable("topicId") int topicId,@RequestBody Assignment newAssignment) {
 		Optional<Topic> data = topicRepository.findById(topicId);
-		 
+		System.out.println("…………………………………… create assignment");
 		if(data.isPresent()) {
 			Topic topic = data.get();
 			newAssignment.setTopic(topic);
-        
+           System.out.println("%%%%%%%%%%%%%%5 create assignment");
 			return assignmentRepository.save(newAssignment);
 		}
 		return null;	 
@@ -102,6 +104,7 @@ public class AssignmentService {
 	
 	@PutMapping("/api/assignment/{Id}")
 	public Assignment updateAssignment(@PathVariable("Id") int assignmentId,@RequestBody Assignment newAssign) {
+		 
 		Assignment assignmentfind=findAssignmentById(assignmentId);
 		if(assignmentfind!=null) {
 			assignmentfind.setClassName(newAssign.getClassName());
@@ -115,18 +118,18 @@ public class AssignmentService {
 			assignmentfind.setSrc(newAssign.getSrc());
 			assignmentfind.setStyle(newAssign.getStyle());
 			assignmentfind.setText(newAssign.getText());
-			assignmentfind.setTopic(newAssign.getTopic());
+//			assignmentfind.setTopic(newAssign.getTopic());
 			assignmentfind.setWidgetType(newAssign.getWidgetType());
 			assignmentfind.setWidth(newAssign.getWidth());
 			
 			assignmentfind.setTitle(newAssign.getTitle());
 			
-			assignmentfind.setTopic(newAssign.getTopic());
+			assignmentfind.setPoints(newAssign.getPoints());
 			
 			assignmentfind.setDescription(	newAssign.getDescription());
-		
 			
-			
+			 assignmentRepository.save(assignmentfind);
+			 System.out.println("%%%%%%%%%%%%%%5 update assignment");
 			return assignmentfind;
 			
 		}

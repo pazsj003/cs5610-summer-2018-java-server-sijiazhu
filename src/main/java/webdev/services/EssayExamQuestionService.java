@@ -27,35 +27,35 @@ import webdev.repositories.ExamRepository;
 public class EssayExamQuestionService {
 	@Autowired
 	EssayExamQuestionRepository EssayRepo;
-	
+
 	@Autowired
 	ExamRepository examRepository;
-	
-	
+
 	@PostMapping("/api/exam/{examId}/essay")
-	public EssayExamQuestion createEssayQuestion(@PathVariable("examId") int examId,@RequestBody EssayExamQuestion newEssayQuestion) {
+	public EssayExamQuestion createEssayQuestion(@PathVariable("examId") int examId,
+			@RequestBody EssayExamQuestion newEssayQuestion) {
 		Optional<Exam> data = examRepository.findById(examId);
 		System.out.println("yes I am in ESSAY outer*******");
-		if(data.isPresent()) {
+		if (data.isPresent()) {
 			Exam exam = data.get();
 			newEssayQuestion.setExam(exam);
-        System.out.println("yes I am in create EXan*******");
+			System.out.println("yes I am in create EXan*******");
 			return EssayRepo.save(newEssayQuestion);
 		}
-		return null;	 
+		return null;
 	}
-	
+
 	@GetMapping("/api/exam/{examId}/essay")
 	public List<EssayExamQuestion> findAllEssayQuestionsForExam(@PathVariable("examId") int examId) {
-		List<EssayExamQuestion> newEssayquestion=new ArrayList<EssayExamQuestion>();
+		List<EssayExamQuestion> newEssayquestion = new ArrayList<EssayExamQuestion>();
 		Optional<Exam> optionalExam = examRepository.findById(examId);
-		if(optionalExam.isPresent()) {
+		if (optionalExam.isPresent()) {
 			Exam exam = optionalExam.get();
-			List<BaseExamQuestion>baseQuestion= exam.getQuestions();
-			for(BaseExamQuestion question:baseQuestion) {
-				if(question instanceof EssayExamQuestion) {
-					EssayExamQuestion Essayquestion  = (EssayExamQuestion)question;
-					if(!Essayquestion.getTitle().equals("")) {
+			List<BaseExamQuestion> baseQuestion = exam.getQuestions();
+			for (BaseExamQuestion question : baseQuestion) {
+				if (question instanceof EssayExamQuestion) {
+					EssayExamQuestion Essayquestion = (EssayExamQuestion) question;
+					if (!Essayquestion.getTitle().equals("")) {
 						newEssayquestion.add(Essayquestion);
 					}
 				}
@@ -64,17 +64,17 @@ public class EssayExamQuestionService {
 		}
 		return null;
 	}
-	
+
 	@DeleteMapping("/api/essay/{id}")
-	public void deleteEssayQuestionById(@PathVariable("id")int EssayquestionId) {
+	public void deleteEssayQuestionById(@PathVariable("id") int EssayquestionId) {
 		EssayRepo.deleteById(EssayquestionId);
 	}
-	
+
 	@GetMapping("/api/essay")
 	public List<EssayExamQuestion> findAllEssayQuestions() {
 		return (List<EssayExamQuestion>) EssayRepo.findAll();
 	}
-	
+
 	@GetMapping("/api/essay/{Id}")
 	public EssayExamQuestion findEssayQuestionById(@PathVariable("Id") int EssayquestionId) {
 		Optional<EssayExamQuestion> data = EssayRepo.findById(EssayquestionId);
@@ -83,50 +83,54 @@ public class EssayExamQuestionService {
 		}
 		return null;
 	}
-	
-//	@PostMapping("/api/exam/{examId}/essay")
-//	public void saveEssayQuestion(@PathVariable("examId") int examId, @RequestBody List<EssayExamQuestion> newEssayQuestion) {
-//		Optional<Exam> data = examRepository.findById(examId);
-//		if(data.isPresent()) {
-//			Exam exam = data.get();
-//			List<EssayExamQuestion> eassyQuestion=findAllEssayQuestionsForExam(examId);
-//			for(EssayExamQuestion EassyQuestion : eassyQuestion) {
-//				deleteEssayQuestionById(EassyQuestion.getId());
-//			}
-//			for (EssayExamQuestion EassyQuestion : newEssayQuestion) {
-//				EassyQuestion.setExam(exam);
-//			System.out.println("EassyQuestionID is ***"+EassyQuestion.getId()+"EassyQuestion text ******"+EassyQuestion.getTitle());
-//			EssayRepo.save(EassyQuestion);
-//			}
-//		} 
-//	}
-	
+
+	// @PostMapping("/api/exam/{examId}/essay")
+	// public void saveEssayQuestion(@PathVariable("examId") int examId,
+	// @RequestBody List<EssayExamQuestion> newEssayQuestion) {
+	// Optional<Exam> data = examRepository.findById(examId);
+	// if(data.isPresent()) {
+	// Exam exam = data.get();
+	// List<EssayExamQuestion> eassyQuestion=findAllEssayQuestionsForExam(examId);
+	// for(EssayExamQuestion EassyQuestion : eassyQuestion) {
+	// deleteEssayQuestionById(EassyQuestion.getId());
+	// }
+	// for (EssayExamQuestion EassyQuestion : newEssayQuestion) {
+	// EassyQuestion.setExam(exam);
+	// System.out.println("EassyQuestionID is
+	// ***"+EassyQuestion.getId()+"EassyQuestion text
+	// ******"+EassyQuestion.getTitle());
+	// EssayRepo.save(EassyQuestion);
+	// }
+	// }
+	// }
+
 	@PutMapping("/api/essay/{Id}")
-	public EssayExamQuestion updateEssayQuestion(@PathVariable("Id") int essayQuestionId,@RequestBody EssayExamQuestion newEssayExamQuestion) {
-		EssayExamQuestion EssayQuestionfind=findEssayQuestionById(essayQuestionId);
-		if(EssayQuestionfind!=null) {
+	public EssayExamQuestion updateEssayQuestion(@PathVariable("Id") int essayQuestionId,
+			@RequestBody EssayExamQuestion newEssayExamQuestion) {
+		EssayExamQuestion EssayQuestionfind = findEssayQuestionById(essayQuestionId);
+		if (EssayQuestionfind != null) {
 			EssayQuestionfind.setTitle(newEssayExamQuestion.getTitle());
-			
+
 			EssayQuestionfind.setDescription(newEssayExamQuestion.getDescription());
-			
-			EssayQuestionfind.setExam(newEssayExamQuestion.getExam());
-			
+
+//			EssayQuestionfind.setExam(newEssayExamQuestion.getExam());
+
 			EssayQuestionfind.setId(newEssayExamQuestion.getId());
-			
+
 			EssayQuestionfind.setInstructions(newEssayExamQuestion.getInstructions());
-			
+
 			EssayQuestionfind.setPoints(newEssayExamQuestion.getPoints());
-			
+
 			EssayQuestionfind.setSubtitle(newEssayExamQuestion.getSubtitle());
-			
-			 
+
 			EssayQuestionfind.setType(newEssayExamQuestion.getType());
+
+			EssayQuestionfind.setText(newEssayExamQuestion.getText());
 			
-			EssayQuestionfind.setTitle(newEssayExamQuestion.getText());
-			 
+			EssayRepo.save(EssayQuestionfind);
 			
 			return EssayQuestionfind;
-			
+
 		}
 		return null;
 	}

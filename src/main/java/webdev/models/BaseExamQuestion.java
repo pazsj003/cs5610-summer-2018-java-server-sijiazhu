@@ -18,7 +18,7 @@ public class BaseExamQuestion {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private int points;
+	private String points;
 	private String title;
 	private String description;
 	private String instructions;
@@ -45,10 +45,10 @@ public class BaseExamQuestion {
 	public void setSubtitle(String subtitle) {
 		this.subtitle = subtitle;
 	}
-	public int getPoints() {
+	public String getPoints() {
 		return points;
 	}
-	public void setPoints(int points) {
+	public void setPoints(String points) {
 		this.points = points;
 	}
  

@@ -99,7 +99,7 @@ public class BaseQuestionService {
 			
 			baseQuestionfind.setDescription(newBaseExamQuestion.getDescription());
 			
-			baseQuestionfind.setExam(newBaseExamQuestion.getExam());
+//			baseQuestionfind.setExam(newBaseExamQuestion.getExam());
 			
 			baseQuestionfind.setId(newBaseExamQuestion.getId());
 			
@@ -111,7 +111,7 @@ public class BaseQuestionService {
 			
 			 
 			baseQuestionfind.setType(newBaseExamQuestion.getType());
-			
+			baseQuestionRepository.save(baseQuestionfind);
  
 			return baseQuestionfind;
 			

@@ -8,15 +8,15 @@ import javax.persistence.Table;
 @Entity
 public class Assignment  extends Widget{
 	@Column(name = "POINTS")
-	private int points;
+	private String points;
 	@Column(name = "TITLE")
 	private String title;
 	@Column(name = "DESCRIPTION")
 	private String description;
-	public int getPoints() {
+	public String getPoints() {
 		return points;
 	}
-	public void setPoints(int points) {
+	public void setPoints(String points) {
 		this.points = points;
 	}
 	public String getTitle() {
