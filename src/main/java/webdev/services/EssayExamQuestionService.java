@@ -120,8 +120,9 @@ public class EssayExamQuestionService {
 			EssayQuestionfind.setInstructions(newEssayExamQuestion.getInstructions());
 
 			EssayQuestionfind.setPoints(newEssayExamQuestion.getPoints());
-
-			EssayQuestionfind.setSubtitle(newEssayExamQuestion.getSubtitle());
+			
+			EssayQuestionfind.setIcon(newEssayExamQuestion.getIcon());
+			 
 
 			EssayQuestionfind.setType(newEssayExamQuestion.getType());
 

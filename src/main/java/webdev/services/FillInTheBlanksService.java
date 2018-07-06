@@ -20,10 +20,13 @@ import webdev.models.Exam;
 import webdev.models.FillInTheBlanksExamQuestion;
 import webdev.repositories.ExamRepository;
 import webdev.repositories.FillInTheBlanksExamQuestionRepository;
+import webdev.repositories.OptionItemRepositry;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class FillInTheBlanksService {
+	@Autowired
+	OptionItemRepositry varibleRepo;
 	@Autowired
 	FillInTheBlanksExamQuestionRepository FillInBlackRepo;
 	@Autowired
@@ -101,12 +104,12 @@ public class FillInTheBlanksService {
 
 			FillBlankQuestionfind.setPoints(newFillInTheBlanksQuestion.getPoints());
 
-			FillBlankQuestionfind.setSubtitle(newFillInTheBlanksQuestion.getSubtitle());
+			FillBlankQuestionfind.setIcon(newFillInTheBlanksQuestion.getIcon());
 
 			FillBlankQuestionfind.setType(newFillInTheBlanksQuestion.getType());
 			
 
-			FillBlankQuestionfind.setVariables(newFillInTheBlanksQuestion.getVariables());
+			FillBlankQuestionfind.setVariable(newFillInTheBlanksQuestion.getVariable());
 			
 			
 			FillInBlackRepo.save(FillBlankQuestionfind);

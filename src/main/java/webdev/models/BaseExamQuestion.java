@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="SINGLE_QUESTION")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class BaseExamQuestion {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -22,11 +22,20 @@ public class BaseExamQuestion {
 	private String title;
 	private String description;
 	private String instructions;
-	private String subtitle;
+ 
+    private String icon;
 	private String type;
 	@ManyToOne
 	@JsonIgnore
 	private Exam exam;
+ 
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -39,12 +48,8 @@ public class BaseExamQuestion {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getSubtitle() {
-		return subtitle;
-	}
-	public void setSubtitle(String subtitle) {
-		this.subtitle = subtitle;
-	}
+ 
+	 
 	public String getPoints() {
 		return points;
 	}

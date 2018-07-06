@@ -89,6 +89,9 @@ public class MultipleChoicesService {
 	public MultipleChoiceExamQuestion updateMultipleChoiceQuestion
 	(@PathVariable("Id") int MultipleChoiceId,@RequestBody MultipleChoiceExamQuestion newMultipleChoiceQuestion) {
 		MultipleChoiceExamQuestion MultipleChoiceQuestionfind = findMultipleChoiceQuestionById(MultipleChoiceId);
+			 
+			System.out.println("@@@@@@@@@@ mutltstart");
+		
 		if (MultipleChoiceQuestionfind != null) {
 			MultipleChoiceQuestionfind.setTitle(newMultipleChoiceQuestion.getTitle());
 
@@ -102,7 +105,8 @@ public class MultipleChoicesService {
 
 			MultipleChoiceQuestionfind.setPoints(newMultipleChoiceQuestion.getPoints());
 
-			MultipleChoiceQuestionfind.setSubtitle(newMultipleChoiceQuestion.getSubtitle());
+			MultipleChoiceQuestionfind.setIcon(newMultipleChoiceQuestion.getIcon());
+	 
 
 			MultipleChoiceQuestionfind.setType(newMultipleChoiceQuestion.getType());
 			
@@ -111,7 +115,7 @@ public class MultipleChoicesService {
 			MultipleChoiceQuestionfind.setOptions(newMultipleChoiceQuestion.getOptions());
 			
 			MultipleChioicesRepo.save(MultipleChoiceQuestionfind);
-			
+			System.out.println("@@@@@@@@@@done");
 			return MultipleChoiceQuestionfind;
 
 		}

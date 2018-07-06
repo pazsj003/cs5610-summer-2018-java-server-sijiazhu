@@ -84,23 +84,7 @@ public class AssignmentService {
 		}
 		return null;
 	}
-	
-//	@PostMapping("/api/assignment/{assignmentId}/")
-//	public void saveAssignment(@PathVariable("topicId") int topicId, @RequestBody List<Assignment> newAssignments) {
-//		Optional<Topic> data = topicRepository.findById(topicId);
-//		if(data.isPresent()) {
-//			Topic topic = data.get();
-//			List<Assignment> assignments=findAllAssignmentForTopic(topicId);
-//			for(Assignment assign : assignments) {
-//				deleteAssignmentId(assign.getId());
-//			}
-//			for (Assignment assign : newAssignments) {
-//				assign.setTopic(topic);
-//			System.out.println("assignID is ***"+assign.getId()+"assigns text ******"+assign.getText());
-//			assignmentRepository.save(assign);
-//			}
-//		} 
-//	}
+
 	
 	@PutMapping("/api/assignment/{Id}")
 	public Assignment updateAssignment(@PathVariable("Id") int assignmentId,@RequestBody Assignment newAssign) {

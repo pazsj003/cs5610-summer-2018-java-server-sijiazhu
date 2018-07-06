@@ -36,8 +36,11 @@ public class BaseQuestionService {
 			Exam exam = optionalExam.get();
 			List<BaseExamQuestion> questions = exam.getQuestions();
 			int count = questions.size();
+			System.out.println("find all base question &&&&&&&&&&&");
 			return questions;
 		}
+		
+		
 		return null;
 	}
 	
@@ -107,8 +110,9 @@ public class BaseQuestionService {
 			
 			baseQuestionfind.setPoints(newBaseExamQuestion.getPoints());
 			
-			baseQuestionfind.setSubtitle(newBaseExamQuestion.getSubtitle());
+			baseQuestionfind.setIcon(newBaseExamQuestion.getIcon());
 			
+			 
 			 
 			baseQuestionfind.setType(newBaseExamQuestion.getType());
 			baseQuestionRepository.save(baseQuestionfind);

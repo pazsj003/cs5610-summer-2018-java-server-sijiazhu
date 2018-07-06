@@ -101,13 +101,13 @@ public class TrueOrFalseService {
 
 			TrueOrFalseQuestionfind.setPoints(newTrueOrFalseQuestion.getPoints());
 
-			TrueOrFalseQuestionfind.setSubtitle(newTrueOrFalseQuestion.getSubtitle());
+			TrueOrFalseQuestionfind.setIcon(newTrueOrFalseQuestion.getIcon());
 
 			TrueOrFalseQuestionfind.setType(newTrueOrFalseQuestion.getType());
 			
 
 			TrueOrFalseQuestionfind.setTrue(newTrueOrFalseQuestion.isTrue());
-			
+		 
 			
 			 TrueFlaseRepo.save(TrueOrFalseQuestionfind);
 
